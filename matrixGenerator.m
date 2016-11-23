@@ -39,7 +39,7 @@ for i=1:diagMatNum
     end
 end
  
-%generate b
+%generate b and x
 lowerX=-1000;
 upperX=1000;
 X=cell(diagMatNum,QMatNum);
