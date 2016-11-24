@@ -1,4 +1,4 @@
-function [x,relres,resvec]=solution(A,b,flag,tol,maxIter)
+function [x,relres,iter,resvec]=solution(A,b,flag,tol,maxIter)
 if nargin==3
     tol=1e-6;
     maxIter=30;
@@ -17,7 +17,7 @@ switch flag
         [x,flag,relres,iter,resvec]=pcg(A,b,tol,maxIter);
         
     case 2 % lanczos
-        [x,relres,resvec]=lanczos(A,b,tol,maxIter);
+        [x,relres,iter,resvec]=lanczos(A,b,tol,maxIter);
         
     case 3 % MINRES
         [x,flag,relres,iter,resvec]=minres(A,b,tol,maxIter);

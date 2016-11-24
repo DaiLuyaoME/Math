@@ -2,24 +2,45 @@ clear all;
 close all;
 clc;
 
+%%
 % Matrix Generator
-lowerBound=-100.0;
+lowerBound=1;
 upperBound=100.0;
-diagSize=[1,100];
+num=100
+diagSize=[1,num];
 
 % generate diagMatrix
 diagMatNum=5;
 diagMat=cell(1,diagMatNum);
 diagEle=cell(1,diagMatNum);
-for i=1:ceil(diagMatNum/2);
-    diagEle{i}=random('unif',1,upperBound,diagSize);
-    diagMat{i}= diag(diagEle{i});
-end
-for i=(ceil(diagMatNum/2)+1):diagMatNum;
-    diagEle{i}=random('unif',1,upperBound,diagSize);
-    diagMat{i}= diag(diagEle{i});
+
+% flag=1:uniform distribution
+% flag=2:normal distribution
+flag=2;
+temp=zeros(1,num);
+mu=100;sigma=30;
+switch flag
+    case 1
+        for i=1:diagMatNum
+            diagEle{i}=random('unif',1,upperBound,diagSize);
+            diagMat{i}= diag(diagEle{i});
+        end
+    case 2
+        for i=1:diagMatNum
+            for j=1:numel(temp)
+                
+                tempEle=normrnd(mu,sigma);
+                while (tempEle<lowerBound || tempEle>upperBound)
+                    tempEle=normrnd(mu,sigma);
+                end
+                temp(j)=tempEle;
+            end
+            diagEle{i}=temp;
+            diagMat{i}=diag(diagEle{i});
+        end
 end
 
+%%
 % generate Q
 QMatNum=10;
 QMat=cell(1,QMatNum);
@@ -30,6 +51,7 @@ for i=1:QMatNum
     QMat{i}=Q;
 end;
 
+%%
 % generate A
 ANum=diagMatNum*QMatNum;
 A=cell(diagMatNum,QMatNum);
@@ -38,7 +60,8 @@ for i=1:diagMatNum
         A{i,j}=QMat{j}*diagMat{i}*transpose(QMat{j});
     end
 end
- 
+
+%%
 %generate b and x
 lowerX=-1000;
 upperX=1000;
