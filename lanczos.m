@@ -59,7 +59,7 @@ while(norm(r0)>tol && count<maxCount)
 end
 x=x0;
 relres=norm(b-A*x)/norm(b);
-fprintf('lanczos algorithm fail to converge\n');
+fprintf('lanczos reached maxIter\n');
 end
 
 

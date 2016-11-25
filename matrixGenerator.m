@@ -6,7 +6,7 @@ clc;
 % Matrix Generator
 lowerBound=1;
 upperBound=100.0;
-num=100
+num=100;
 diagSize=[1,num];
 
 % generate diagMatrix
@@ -16,13 +16,16 @@ diagEle=cell(1,diagMatNum);
 
 % flag=1:uniform distribution
 % flag=2:normal distribution
-flag=2;
+flag=1;
 temp=zeros(1,num);
 mu=100;sigma=30;
 switch flag
     case 1
         for i=1:diagMatNum
-            diagEle{i}=random('unif',1,upperBound,diagSize);
+            diagTemp=random('unif',lowerBound,upperBound,diagSize);
+            diagTemp(end)=upperBound;
+            diagTemp(1)=lowerBound;
+            diagEle{i}=diagTemp;
             diagMat{i}= diag(diagEle{i});
         end
     case 2
@@ -75,5 +78,5 @@ for i=1:diagMatNum
 end
 
 %% solve
-[x,flag,relres,iter,resvec]=cgs(A{1,1},b{1},1e-8,30);
-error=abs((x-X{1,1})./b{1});
+% [x,flag,relres,iter,resvec]=cgs(A{1,1},b{1},1e-8,30);
+% error=abs((x-X{1,1})./b{1});
