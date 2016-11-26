@@ -22,13 +22,16 @@ switch flag
     case 3 % MINRES
         [x,flag,relres,iter,resvec]=minres(A,b,tol,maxIter);
         
+    case 4 % Jacobian preconditioner conjugate gradient
+        [x,flag,relres,iter,resvec]=pcg(A,b,tol,maxIter,diag(diag(A));
         
-    case 4 % GMRES
-        
-    case 5 % Biconjugate gradient
-        
-    case 6
-        
+    case 5 % SOR preconditioner conjugate gradient
+        L=tril(A,-1); w=0.3;D=diag(A);
+        M=(D+w*L)./w;
+        [x,flag,relres,iter,resvec]=pcg(A,b,tol,maxIter,M);
+    case 6 % incomplete cholesky factorization preconditioner conjugate gradient
+        L=ichol(A);
+        [x,flag,relres,iter,resvec]=pcg(A,b,tol,maxIter,L,L');
     otherwise
 end
 end

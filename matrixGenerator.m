@@ -2,7 +2,7 @@ clear all;
 close all;
 clc;
 
-isPosDef=0;
+isPosDef=1;
 %% positive definite
 % Matrix Generator
 if (isPosDef==1)
