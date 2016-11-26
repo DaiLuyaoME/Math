@@ -2,7 +2,7 @@ function [x,relres,toltalIter,resvec]=lanczos(A,b,tol,maxIter)
 % function x=lanczos(A,b,tol,maxIter)
 x0=0;r0=b;
 
-% circular lanczos, circle size is 30
+% circular lanczos, circle size is 10
 iter=30;Q=zeros(size(A,1),iter);T=zeros(iter+1,iter+1);
 maxCount=ceil(maxIter/iter);
 count=0;
@@ -18,7 +18,7 @@ while(norm(r0)>tol && count<maxCount)
     Q(:,2)=temp/T(2,1);
     yi=norm(r0)/T(1,1);
     rii=abs(T(2,1)*yi);
-    resvec(1)=rii;
+    resvec(count*iter+1)=rii;
     toltalIter=toltalIter+1;
     
     for i=2:iter
@@ -46,7 +46,7 @@ while(norm(r0)>tol && count<maxCount)
         %             fprintf('rii does not equal ri');
         %         end
         resvec(count*iter+i)=rii;
-        if(rii/norm(b)<tol)
+        if(rii/norm(b)<tol || toltalIter>maxIter)
             zi=Q(:,1:i)*yi;
             x=zi+x0;
             relres=rii/norm(b);
