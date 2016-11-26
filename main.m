@@ -1,45 +1,26 @@
 %% generate data
 matrixGenerator;
-%%
-cg=1;
-lanczos=2;
-minres=3;
-jcg=4;
-sorcg=5;
-chocg=6;
-res=zeros(3,ANum);
-% rescg=zeros(1,ANum);
-% reslan=zeros(1,ANum);
-% minres=zeros(1,ANum);
-for i=1:diagMatNum
-    for j=1:QMatNum
-        for k=1:3
-            [x,relres,iter,resvec]=solution(A{i,j},b{i,j},k,1e-6,40);
-            res(k,(i-1)*QMatNum+j)=relres;
-        end
-    end
-end
 
 %%
 % for table 2.3.3
 %diagMatNum=5;
-maxIter=90;
-absoluteRes=zeros(3,diagMatNum);
-resvecCell=cell(3,diagMatNum);
+methodNum=5;
+maxIter=30;
+absoluteRes=zeros(methodNum,diagMatNum);
+resvecCell=cell(methodNum,diagMatNum);
 for i=1:diagMatNum
-    for j=1:3
+    for j=1:methodNum
         [x,relres,iter,resvec]=solution(A{i,1},b{i,1},j,1e-12,maxIter);
         absoluteRes(j,i)=relres*norm(b{i,1});
         resvecCell{j,i}=resvec;
     end
 end
 %% plot final absolute residual
-algorithmName={'CG','Lanczos','MINRES'};
+algorithmName={'CG','Lanczos','MINRES','GS CG','SOR-pre CG'};
 close all;
 figure1=figure('PaperSize',[80 60]);
-
-for j=1:3
-    subploti=subplot(1,3,j,'Parent',figure1,'FontSize',15,'FontName','Times New Roman');
+for j=1:methodNum
+    subploti=subplot(1,methodNum,j,'Parent',figure1,'FontSize',15,'FontName','Times New Roman');
     
     plot(absoluteRes(j,:),'Parent',subploti,'MarkerFaceColor',[0 0 1],'Marker','o','LineWidth',3,...
         'LineStyle',':',...
@@ -49,16 +30,16 @@ for j=1:3
     xlabel('{D}_{i}','FontSize',20);
     xlim([1,5]);
     ylabel('绝对误差','FontSize',20);
-    legend('{e}_{90}');
+    legend('{e}_{30}');
     % hold on;
 end
 %% plot residual tendency
 close all;
-algorithmName={'CG','Lanczos','MINRES'};
+algorithmName={'CG','Lanczos','MINRES','G-S CG','SOR-pre CG'};
 color={'y','m','c','r','k','g'};
 marker={'o','+','*','s','d'};
 leg={'{D}_{1}','{D}_{2}','{D}_{3}','{D}_{4}','{D}_{5}'};
-for i=1:3
+for i=1:methodNum
     tempfig=figure('PaperType','<custom>','PaperSize',[160,120]);
     axes1 = axes('Parent',tempfig,'FontSize',20,'FontName','Times New Roman');
     box(axes1,'on');
@@ -71,7 +52,7 @@ for i=1:3
     xlabel('迭代次数','FontSize',20);
     ylabel('绝对误差','FontSize',20);
     legend(leg);
-    ylim([0,1e5]);
+    ylim([0,1e4]);
     xlim([0,maxIter]);
     % xlim([0,40]);
     
@@ -80,11 +61,11 @@ end
 
 %% plot e(n)/e(n-1)
 close all;
-algorithmName={'CG','Lanczos','MINRES'};
+algorithmName={'CG','Lanczos','MINRES','G-S CG','SOR-pre CG'};
 color={'y','m','c','r','k','g'};
 marker={'o','+','*','s','d'};
 leg={'{D}_{1}','{D}_{2}','{D}_{3}','{D}_{4}','{D}_{5}'};
-for i=1:3
+for i=1:methodNum
     tempfig=figure('PaperType','<custom>','PaperSize',[160,120]);
     axes1 = axes('Parent',tempfig,'FontSize',20,'FontName','Times New Roman');
     box(axes1,'on');

@@ -22,16 +22,27 @@ switch flag
     case 3 % MINRES
         [x,flag,relres,iter,resvec]=minres(A,b,tol,maxIter);
         
-    case 4 % Jacobian preconditioner conjugate gradient
-        [x,flag,relres,iter,resvec]=pcg(A,b,tol,maxIter,diag(diag(A));
+    case 4 % G-S preconditioner conjugate gradient
+        D=diag(diag(A));
+        L=tril(A,-1);
+        M=(D+L)*inv(D)*(D+L');
+        [x,flag,relres,iter,resvec]=pcg(A,b,tol,maxIter,M);
+        fprintf('condition number of G-S-preconditioned CG is\n');
+        disp(cond(inv(M)*A,2));
+        
         
     case 5 % SOR preconditioner conjugate gradient
-        L=tril(A,-1); w=0.3;D=diag(A);
-        M=(D+w*L)./w;
+        D=diag(diag(A));
+        L=tril(A,-1);
+        w=0.6;
+        M=( (D/w+L)*inv(D/w)*(D/w+L') )/(2-w);
         [x,flag,relres,iter,resvec]=pcg(A,b,tol,maxIter,M);
-    case 6 % incomplete cholesky factorization preconditioner conjugate gradient
-        L=ichol(A);
-        [x,flag,relres,iter,resvec]=pcg(A,b,tol,maxIter,L,L');
+        %     case 6 % incomplete cholesky factorization preconditioner conjugate gradient
+        %         L=ichol(A,struct('michol','on'));
+        %         [x,flag,relres,iter,resvec]=pcg(A,b,tol,maxIter,L,L');
+        fprintf('condition number of SOR-preconditioned CG is\n');
+        disp(cond(inv(M)*A,2));
+        
     otherwise
 end
 end
