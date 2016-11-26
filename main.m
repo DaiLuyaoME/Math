@@ -10,7 +10,7 @@ res=zeros(3,ANum);
 for i=1:diagMatNum
     for j=1:QMatNum
         for k=1:3
-            [x,relres,iter,resvec]=solution(A{i,j},b{i,j},k,1e-6,30);
+            [x,relres,iter,resvec]=solution(A{i,j},b{i,j},k,1e-6,40);
             res(k,(i-1)*QMatNum+j)=relres;
         end
     end
@@ -23,7 +23,7 @@ absoluteRes=zeros(3,diagMatNum);
 resvecCell=cell(3,diagMatNum);
 for i=1:diagMatNum
     for j=1:3
-        [x,relres,iter,resvec]=solution(A{i,1},b{i,1},j,1e-12,60);
+        [x,relres,iter,resvec]=solution(A{i,1},b{i,1},j,1e-12,40);
         absoluteRes(j,i)=relres*norm(b{i,1});
         resvecCell{j,i}=resvec;
     end
@@ -39,11 +39,12 @@ for j=1:3
     plot(absoluteRes(j,:),'Parent',subploti,'MarkerFaceColor',[0 0 1],'Marker','o','LineWidth',3,...
         'LineStyle',':',...
         'Color',[0 0 1]);
-    title(algorithmName{j},'FontSize',15,'FontName','Times New Roman');
+    %     title(algorithmName{j},'FontSize',15,'FontName','Times New Roman');
+    title('Circular Lanczos with period=10','FontSize',15,'FontName','Times New Roman');
     xlabel('{D}_{i}','FontSize',20);
     xlim([1,5]);
     ylabel('绝对误差','FontSize',20);
-    legend('{e}_{50}');
+    legend('{e}_{40}');
     % hold on;
 end
 %% plot residual tendency
@@ -67,6 +68,7 @@ for i=1:3
     legend(leg);
     ylim([0,1e4]);
     xlim([0,60]);
+% xlim([0,40]);
     
     title(algorithmName{i},'FontSize',15,'FontName','Times New Roman');
 end
@@ -93,9 +95,9 @@ for i=1:3
     ylabel('$\left\| \frac{{{e}_{n+1}}}{{{e}_{n}}} \right\|$','Interpreter','latex','FontSize',30);
     legend(leg);
     ylim([0,1.6]);
-%     xlim([0,1]);
-%     title('$\frac{{{e}_{n+1}}}{{{e}_{n}}}$','FontSize',15,'FontName','Times New Roman');
-%         title(algorithmName{i},'FontSize',15,'FontName','Times New Roman');
+    %     xlim([0,1]);
+    %     title('$\frac{{{e}_{n+1}}}{{{e}_{n}}}$','FontSize',15,'FontName','Times New Roman');
+    %         title(algorithmName{i},'FontSize',15,'FontName','Times New Roman');
 end
 
 
@@ -117,4 +119,20 @@ ylabel('特征值区间','FontWeight','bold','FontSize',14);
 % 创建 zlabel
 zlabel('特征值数量','FontWeight','bold','FontSize',14);
 
+%% plot circular Lanczos
+close all;
+figure1=figure('PaperSize',[80 60]);
+axes1 = axes('Parent',figure1,'FontSize',15,'FontName','Times New Roman');
+box(axes1,'on');
+hold(axes1,'all');
+plot(absoluteRes(2,:),'Parent',axes1,'MarkerFaceColor',[0 0 1],'Marker','o','LineWidth',3,...
+    'LineStyle',':',...
+    'Color',[0 0 1]);
+title('Non-Circular Lanczos','FontSize',15,'FontName','Times New Roman');
+xlabel('{D}_{i}','FontSize',20);
+xlim([1,5]);
+ylabel('绝对误差','FontSize',20);
+legend('{e}_{40}');
+uimenufcn(gcf,'EditCopyFigure');
+% hold on;
 
