@@ -16,38 +16,41 @@ diagEle=cell(1,diagMatNum);
 
 % flag=1:uniform distribution
 % flag=2:normal distribution
-flag=1;
-temp=zeros(1,num);
-mu=100;sigma=30;
-switch flag
-    case 1
-        for i=1:diagMatNum
-            diagTemp=random('unif',lowerBound,upperBound,diagSize);
-            diagTemp(end)=upperBound;
-            diagTemp(1)=lowerBound;
-            diagEle{i}=diagTemp;
-            diagMat{i}= diag(diagEle{i});
-        end
-    case 2
-        for i=1:diagMatNum
-            for j=1:numel(temp)
-                
-                tempEle=normrnd(mu,sigma);
-                while (tempEle<lowerBound || tempEle>upperBound)
-                    tempEle=normrnd(mu,sigma);
-                end
-                temp(j)=tempEle;
-            end
-            diagEle{i}=temp;
-            diagMat{i}=diag(diagEle{i});
-        end
+for i=1:diagMatNum
+    flag=i;
+    switch flag
+        case 1 %uniform distribution
+            diagMat{i}= diagMatGen(num,lowerBound,upperBound,'unif');
+            diagEle{i}=diag(diagMat{i});
+        case 2 %normal distribution: mu=50, sigma=30;
+            mu=50;sigma=10;
+            diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
+            diagEle{i}=diag(diagMat{i});
+        case 3 %normal distribution: mu=1, sigma=30;
+            mu=1;sigma=10;
+            diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
+            diagEle{i}=diag(diagMat{i});
+        case 4 %normal distribution: mu=100, sigma=30;
+            mu=100;sigma=10;
+            diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
+            diagEle{i}=diag(diagMat{i});
+        case 5 %normal distribution: mu=50, sigma=30;
+            mu=1;sigma=10;
+            temp1=diagMatGen(num/2,lowerBound,upperBound,'norm',mu,sigma);
+            mu=100;sigma=10;
+            temp2=diagMatGen(num/2,lowerBound,upperBound,'norm',mu,sigma);
+            diagMat{i}=diag([diag(temp1);diag(temp2)]);
+            diagEle{i}=diag(diagMat{i});
+    end
 end
-
 %%
 % generate Q
 QMatNum=10;
 QMat=cell(1,QMatNum);
-QMatSize=[100,100];
+num=100;
+QMatSize=[num,num];
+
+rng('shuffle');
 for i=1:QMatNum
     temp=random('unif',lowerBound,upperBound,QMatSize);
     [Q,R]=qr(temp);

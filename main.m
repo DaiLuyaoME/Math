@@ -26,10 +26,21 @@ for i=1:diagMatNum
     absoluteRes(j,i)=relres*norm(b{i,1});
     end
 end
+%%
+algorithmName={'CG','Lanczos','MINRES'};
+figure1=figure('PaperSize',[80 60]);
+
 
 for j=1:3
-    subplot(3,1,j)
-plot(absoluteRes(j,:));
+    subploti=subplot(1,3,j,'Parent',figure1,'FontSize',15,'FontName','Times New Roman');
+
+    plot(absoluteRes(j,:),'Parent',subploti,'MarkerFaceColor',[0 0 1],'Marker','o','LineWidth',3,...
+    'LineStyle',':',...
+    'Color',[0 0 1]);
+    title(algorithmName{j},'FontSize',15,'FontName','Times New Roman');
+    xlabel('ÐòºÅ','FontSize',10);
+    ylabel('¾ø¶ÔÎó²î','FontSize',10);
+    legend('e(80)');
 % hold on;
 end
 

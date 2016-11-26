@@ -1,4 +1,4 @@
-function createfigure(X1,Y1,titleName,legendName)
+function createfigure(Y1,titleName,legendName)
 %CREATEFIGURE(Y1)
 %  Y1:  y 数据的矢量
 
@@ -16,7 +16,7 @@ hold(axes1,'all');
 title(titleName,'FontSize',20,'FontName','Times New Roman');
 
 % 创建 plot
-plot(X1,Y1,'Parent',axes1,'MarkerFaceColor',[0 0 1],'Marker','o','LineWidth',3,...
+plot(Y1,'Parent',axes1,'MarkerFaceColor',[0 0 1],'Marker','o','LineWidth',3,...
     'LineStyle',':',...
     'Color',[0 0 1]);
 
