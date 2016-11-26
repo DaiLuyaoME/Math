@@ -19,11 +19,12 @@ end
 %%
 % for table 2.3.3
 %diagMatNum=5;
+maxIter=90;
 absoluteRes=zeros(3,diagMatNum);
 resvecCell=cell(3,diagMatNum);
 for i=1:diagMatNum
     for j=1:3
-        [x,relres,iter,resvec]=solution(A{i,1},b{i,1},j,1e-12,40);
+        [x,relres,iter,resvec]=solution(A{i,1},b{i,1},j,1e-12,maxIter);
         absoluteRes(j,i)=relres*norm(b{i,1});
         resvecCell{j,i}=resvec;
     end
@@ -39,12 +40,12 @@ for j=1:3
     plot(absoluteRes(j,:),'Parent',subploti,'MarkerFaceColor',[0 0 1],'Marker','o','LineWidth',3,...
         'LineStyle',':',...
         'Color',[0 0 1]);
-    %     title(algorithmName{j},'FontSize',15,'FontName','Times New Roman');
-    title('Circular Lanczos with period=10','FontSize',15,'FontName','Times New Roman');
+        title(algorithmName{j},'FontSize',15,'FontName','Times New Roman');
+%     title('Circular Lanczos with period=10','FontSize',15,'FontName','Times New Roman');
     xlabel('{D}_{i}','FontSize',20);
     xlim([1,5]);
     ylabel('绝对误差','FontSize',20);
-    legend('{e}_{40}');
+    legend('{e}_{90}');
     % hold on;
 end
 %% plot residual tendency
@@ -66,9 +67,9 @@ for i=1:3
     xlabel('迭代次数','FontSize',20);
     ylabel('绝对误差','FontSize',20);
     legend(leg);
-    ylim([0,1e4]);
-    xlim([0,60]);
-% xlim([0,40]);
+    ylim([0,1e5]);
+    xlim([0,maxIter]);
+    % xlim([0,40]);
     
     title(algorithmName{i},'FontSize',15,'FontName','Times New Roman');
 end
@@ -102,11 +103,21 @@ end
 
 
 %% analysis the eigen value distribution
-Y=zeros(11,5);
-for i=1:5
-    [nelements,centers]=hist(diagEle{i},[0:10:100]);
-    x=centers;
-    Y(:,i)=nelements;
+close all;
+if (isPosDef==1)
+    Y=zeros(11,5);
+    for i=1:5
+        [nelements,centers]=hist(diagEle{i},[0:10:100]);
+        x=centers;
+        Y(:,i)=nelements;
+    end
+else
+    Y=zeros(21,5);
+    for i=1:5
+        [nelements,centers]=hist(diagEle{i},[-100:10:100]);
+        x=centers;
+        Y(:,i)=nelements;
+    end
 end
 bar3(x,Y);
 % bar3(centers1,nelements1,centers2,nelements2);

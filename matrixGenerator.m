@@ -2,46 +2,93 @@ clear all;
 close all;
 clc;
 
-%%
+isPosDef=0;
+%% positive definite
 % Matrix Generator
-lowerBound=1;
-upperBound=100.0;
-num=100;
-diagSize=[1,num];
-
-% generate diagMatrix
-diagMatNum=5;
-diagMat=cell(1,diagMatNum);
-diagEle=cell(1,diagMatNum);
-
-% flag=1:uniform distribution
-% flag=2:normal distribution
-for i=1:diagMatNum
-    flag=i;
-    switch flag
-        case 1 %uniform distribution
-            diagMat{i}= diagMatGen(num,lowerBound,upperBound,'unif');
-            diagEle{i}=diag(diagMat{i});
-        case 2 %normal distribution: mu=50, sigma=30;
-            mu=50;sigma=10;
-            diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
-            diagEle{i}=diag(diagMat{i});
-        case 3 %normal distribution: mu=1, sigma=30;
-            mu=1;sigma=10;
-            diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
-            diagEle{i}=diag(diagMat{i});
-        case 4 %normal distribution: mu=100, sigma=30;
-            mu=100;sigma=10;
-            diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
-            diagEle{i}=diag(diagMat{i});
-        case 5 %normal distribution: mu=50, sigma=30;
-            mu=1;sigma=10;
-            temp1=diagMatGen(num/2,lowerBound,upperBound,'norm',mu,sigma);
-            mu=100;sigma=10;
-            temp2=diagMatGen(num/2,lowerBound,upperBound,'norm',mu,sigma);
-            diagMat{i}=diag([diag(temp1);diag(temp2)]);
-            diagEle{i}=diag(diagMat{i});
+if (isPosDef==1)
+    lowerBound=1;
+    upperBound=100.0;
+    num=100;
+    diagSize=[1,num];
+    
+    % generate diagMatrix
+    diagMatNum=5;
+    diagMat=cell(1,diagMatNum);
+    diagEle=cell(1,diagMatNum);
+    
+    % flag=1:uniform distribution
+    % flag=2:normal distribution
+    for i=1:diagMatNum
+        flag=i;
+        switch flag
+            case 1 %uniform distribution
+                diagMat{i}= diagMatGen(num,lowerBound,upperBound,'unif');
+                diagEle{i}=diag(diagMat{i});
+            case 2 %normal distribution: mu=50, sigma=30;
+                mu=50;sigma=10;
+                diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
+                diagEle{i}=diag(diagMat{i});
+            case 3 %normal distribution: mu=1, sigma=30;
+                mu=1;sigma=10;
+                diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
+                diagEle{i}=diag(diagMat{i});
+            case 4 %normal distribution: mu=100, sigma=30;
+                mu=100;sigma=10;
+                diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
+                diagEle{i}=diag(diagMat{i});
+            case 5 %normal distribution: mu=50, sigma=30;
+                mu=1;sigma=10;
+                temp1=diagMatGen(num/2,lowerBound,upperBound,'norm',mu,sigma);
+                mu=100;sigma=10;
+                temp2=diagMatGen(num/2,lowerBound,upperBound,'norm',mu,sigma);
+                diagMat{i}=diag([diag(temp1);diag(temp2)]);
+                diagEle{i}=diag(diagMat{i});
+        end
     end
+    
+else
+    %% Non-positive definite
+    % Matrix Generator
+    lowerBound=-100.0;
+    upperBound=100.0;
+    num=100;
+    diagSize=[1,num];
+    
+    % generate diagMatrix
+    diagMatNum=5;
+    diagMat=cell(1,diagMatNum);
+    diagEle=cell(1,diagMatNum);
+    
+    % flag=1:uniform distribution
+    % flag=2:normal distribution
+    for i=1:diagMatNum
+        flag=i;
+        switch flag
+            case 1 %uniform distribution
+                diagMat{i}= diagMatGen(num,lowerBound,upperBound,'unif');
+                diagEle{i}=diag(diagMat{i});
+            case 2 %normal distribution: mu=50, sigma=30;
+                mu=0;sigma=10;
+                diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
+                diagEle{i}=diag(diagMat{i});
+            case 3 %normal distribution: mu=1, sigma=30;
+                mu=-100;sigma=10;
+                diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
+                diagEle{i}=diag(diagMat{i});
+            case 4 %normal distribution: mu=100, sigma=30;
+                mu=100;sigma=10;
+                diagMat{i}=diagMatGen(num,lowerBound,upperBound,'norm',mu,sigma);
+                diagEle{i}=diag(diagMat{i});
+            case 5 %normal distribution: mu=50, sigma=30;
+                mu=-100;sigma=10;
+                temp1=diagMatGen(num/2,lowerBound,upperBound,'norm',mu,sigma);
+                mu=100;sigma=10;
+                temp2=diagMatGen(num/2,lowerBound,upperBound,'norm',mu,sigma);
+                diagMat{i}=diag([diag(temp1);diag(temp2)]);
+                diagEle{i}=diag(diagMat{i});
+        end
+    end
+    
 end
 %%
 % generate Q
