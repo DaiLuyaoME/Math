@@ -14,8 +14,8 @@ singularValue=cell(1,diagMatNum);
 % flag=1:uniform distribution
 % flag=2:normal distribution
 num=n;
-wide=10;
-narrow=1;
+wide=100;
+narrow=10;
 % generate singular values
 for i=1:diagMatNum
     flag=i;

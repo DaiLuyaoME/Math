@@ -22,3 +22,27 @@ data=data-repmat(mn,1,n);
 temp=pc(:,1);
 result=temp*temp'*data;
 plot(result(1,:),result(2,:));
+
+%%
+dataGenerator;
+%% analysis the eigen value distribution
+close all;
+num=40;
+    Y=zeros(num,diagMatNum);
+    zone=linspace(lowerBound,upperBound,num);
+    for i=1:diagMatNum
+        [nelements,centers]=hist(singularValue{i},zone);
+        x=centers;
+        Y(:,i)=nelements;
+    end
+
+bar3(x,Y);
+% bar3(centers1,nelements1,centers2,nelements2);
+% 创建 xlabel
+xlabel('序号','FontWeight','bold','FontSize',14);
+
+% 创建 ylabel
+ylabel('奇异值分布区间','FontWeight','bold','FontSize',14);
+
+% 创建 zlabel
+zlabel('奇异值数量','FontWeight','bold','FontSize',14);
