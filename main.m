@@ -11,7 +11,7 @@ for i=1:numel(x)
 end
 figure
 plot(x,y);
-[signals,pc,v,mu]=pcaSVD([x',y']);
+[pc,signals,v,mu]=pcaSVD([x',y']);
 figure;
 plot(signals(:,1),signals(:,2));
 %%
