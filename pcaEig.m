@@ -9,7 +9,7 @@ function [coeff,score,latent,mu]=pcaEig(data)
 [m,n]=size(data);
 %shift to original point
 mu=mean(data,1);
-display(mu);
+% display(mu);
 data=data-repmat(mu,m,1);
 covx=data'*data./(m-1);
 [coeff,latent]=eig(covx);
