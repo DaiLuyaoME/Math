@@ -1,4 +1,4 @@
-function [signals,pc,v,mu]=pcaEig(data)
+function [signals,pc,v,mu]=pcaSVD(data)
 % PCA by eigen-value decomposition
 % data:MxN matrix, M-samples, N-dimensions
 
@@ -6,10 +6,12 @@ function [signals,pc,v,mu]=pcaEig(data)
 %shift to original point
 mu=mean(data,1);
 data=data-repmat(mu,m,1);
-covx=data'*data./(m-1);
-[pc,v]=eig(covx);
-v=diag(v);
-[temp,index]=sort(v,'descend');
-v=temp;
-pc=pc(:,index);
+Y=data./sqrt((m-1));
+
+[U,S,pc]=svd(Y);
+mn=min(m,n);
+S=S(1:mn,1:mn);
+S=diag(S);
+v=S.*S;
+% pc=pc;
 signals=data*pc;
