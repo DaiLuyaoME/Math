@@ -3,10 +3,10 @@ close all;
 clc;
 %%
 %bound of singular value
-lowerBound=1;
+lowerBound=1.0;
 upperBound=1000.0;
 % matrix size, m must be bigger than n
-m=200;n=100;
+m=800;n=400;
 diagMatNum=10;
 diagMat=cell(1,diagMatNum);
 singularValue=cell(1,diagMatNum);
@@ -74,6 +74,14 @@ for i=1:diagMatNum
             diagMat{i}=diag([diag(temp1);diag(temp2)]);
             singularValue{i}=diag(diagMat{i});
             % case 11:left mid right normal distribution
+        case 11
+            temp1=diag(zeros(floor(num/2),1));
+            temp2=diag(ones(ceil(num/2),1).*upperBound./2);
+%             mu=upperBound;sigma=narrow;
+%             temp2=diagMatGen(floor(num/2),lowerBound,upperBound,'norm',mu,sigma);
+            diagMat{i}=diag([diag(temp1);diag(temp2)]);
+            singularValue{i}=diag(diagMat{i});
+
     end
 end
 

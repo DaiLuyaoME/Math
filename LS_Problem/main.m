@@ -1,46 +1,77 @@
-clear all;
-close all;
-a=3;b=4;
-f=@(t)a*t+b;
-x=1:0.01:100;
-y=f(x);
-% figure
-% plot(x,y);
-for i=1:numel(x)
-    y(i)=y(i)+normrnd(3,10);
-end
-figure
-plot(x,y);
-[pc,signals,v,mu]=pcaSVD([x',y']);
-figure;
-plot(signals(:,1),signals(:,2));
-%%
-result=pcaRecover(signals(:,1),pc(:,1),mu);
-figure;
-plot(result(:,1),result(:,2));
+% clear all;
+% close all;
+% clc;
 
-%%
+%% generate data
 dataGenerator;
-%% analysis the eigen value distribution
-close all;
-num=40;
-    Y=zeros(num,diagMatNum);
-    zone=linspace(lowerBound,upperBound,num);
-    for i=1:diagMatNum
-        [nelements,centers]=hist(singularValue{i},zone);
-        x=centers;
-        Y(:,i)=nelements;
+
+%% solve LS problem
+x_qr=cell(diagMatNum,UMatNum);
+x_svd=cell(diagMatNum,UMatNum);
+residual_qr=cell(diagMatNum,UMatNum);
+residual_svd=cell(diagMatNum,UMatNum);
+norm_x_qr=cell(diagMatNum,UMatNum);
+norm_x_svd=cell(diagMatNum,UMatNum);
+for i=1:diagMatNum
+    for j=1:UMatNum
+        [temp1,temp2,temp3]=lssolve(A{i,j},b{i,j},1);
+        x_svd{i,j}=temp1;residual_svd{i,j}=temp2;norm_x_svd{i,j}=temp3;
+        [temp1,temp2,temp3]=lssolve(A{i,j},b{i,j},2);
+        x_qr{i,j}=temp1;residual_qr{i,j}=temp2;norm_x_qr{i,j}=temp3;
     end
+end
 
-bar3(x,Y);
-% bar3(centers1,nelements1,centers2,nelements2);
-% 创建 xlabel
-xlabel('序号','FontWeight','bold','FontSize',14);
+%% analyse residual
+svd_residual=zeros(diagMatNum,UMatNum);
+for i=1:diagMatNum
+    for j=1:UMatNum
+        svd_residual(i,j)=residual_svd{i,j};
+    end
+end
 
-% 创建 ylabel
-ylabel('奇异值分布区间','FontWeight','bold','FontSize',14);
+qr_residual=zeros(diagMatNum,UMatNum);
+for i=1:diagMatNum
+    for j=1:UMatNum
+        qr_residual(i,j)=residual_qr{i,j};
+    end
+end
 
-% 创建 zlabel
-zlabel('奇异值数量','FontWeight','bold','FontSize',14);
+figure;
+for i=1:diagMatNum
+    plot(svd_residual(i,:));
+    hold on;
+end
 
-%%
+figure;
+for i=1:diagMatNum
+    plot(qr_residual(i,:));
+    hold on;
+end
+
+%% analyse norm(x-x*)
+
+svd_dx=zeros(diagMatNum,UMatNum);
+for i=1:diagMatNum
+    for j=1:UMatNum
+        svd_dx(i,j)=norm(x_svd{i,j}-X{i,j});
+    end
+end
+
+qr_dx=zeros(diagMatNum,UMatNum);
+for i=1:diagMatNum
+    for j=1:UMatNum
+        qr_dx(i,j)=norm(x_qr{i,j}-X{i,j});
+    end
+end
+
+figure;
+for i=1:diagMatNum
+    plot(svd_dx(i,:));
+    hold on;
+end
+
+figure;
+for i=1:diagMatNum
+    plot(qr_dx(i,:));
+    hold on;
+end
