@@ -57,8 +57,9 @@ residual_svd=cell(diagMatNum,UMatNum);
 % norm_x_qr=cell(diagMatNum,UMatNum);
 norm_x_svd=cell(diagMatNum,UMatNum);
 rank_svd=cell(diagMatNum,UMatNum);
-condBound=1200;
-methodtype=4;
+minSvalue=2;
+condBound=upperBound/minSvalue;
+methodtype=2;
 tic;
 for i=1:diagMatNum
     for j=1:UMatNum 
@@ -70,7 +71,7 @@ for i=1:diagMatNum
 end
 toc;
 %% analyse residual
-close all;
+% close all;
 methodname={'QR for Full Rank','QR with column pivoting','SVD','SVD divide and conquer'};
 svd_residual=zeros(diagMatNum,UMatNum);
 for i=1:diagMatNum
@@ -111,7 +112,7 @@ legend(legendName{1},legendName{2},legendName{3},legendName{4},legendName{5},leg
 % end
 
 %% analyse norm(x-x*)
-close all;
+% close all;
 svd_dx=zeros(diagMatNum,UMatNum);
 for i=1:diagMatNum
     for j=1:UMatNum

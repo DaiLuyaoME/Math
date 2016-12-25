@@ -20,5 +20,6 @@ switch distribution
         diagTemp(end)=upperBound;
         diagTemp(1)=lowerBound;
 end
+diagTemp=sort(diagTemp,'descend');
 result=diag(diagTemp);
 end

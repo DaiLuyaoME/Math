@@ -45,15 +45,23 @@ if choose==0
                 temp1=diagMatGen(ceil(num/2),lowerBound,upperBound,'norm',mu,sigma);
                 mu=upperBound;sigma=wide;
                 temp2=diagMatGen(floor(num/2),lowerBound,upperBound,'norm',mu,sigma);
-                diagMat{i}=diag([diag(temp1);diag(temp2)]);
+                diagMat{i}=diag(sort([diag(temp1);diag(temp2)],'descend'));
                 singularValue{i}=diag(diagMat{i});
             case 6 %normal distribution: ;
                 mu=lowerBound;sigma=narrow;
                 temp1=diagMatGen(ceil(num/2),lowerBound,upperBound,'norm',mu,sigma);
                 mu=upperBound;sigma=narrow;
                 temp2=diagMatGen(floor(num/2),lowerBound,upperBound,'norm',mu,sigma);
-                diagMat{i}=diag([diag(temp1);diag(temp2)]);
+                diagMat{i}=diag(sort([diag(temp1);diag(temp2)],'descend'));
                 singularValue{i}=diag(diagMat{i});
+%                     case 7
+%                 temp1=diag(zeros(floor(num/2),1));
+%                 temp2=diag(ones(ceil(num/2),1).*upperBound./2);
+%                 %             mu=upperBound;sigma=narrow;
+%                 %             temp2=diagMatGen(floor(num/2),lowerBound,upperBound,'norm',mu,sigma);
+%                 diagMat{i}=diag([diag(temp1);diag(temp2)]);
+%                 singularValue{i}=diag(diagMat{i});
+
                 
                 
         end

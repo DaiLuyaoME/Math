@@ -3,7 +3,7 @@
 % clc;
 
 %% generate data
-% dataGenerator;
+dataGenerator;
 
 %% analysis the singular value distribution
 
@@ -60,16 +60,18 @@ V_svd=cell(diagMatNum,UMatNum);
 S_svd=cell(diagMatNum,UMatNum);
 rank_svd=cell(diagMatNum,UMatNum);
 methodtype=5;
-tic;
+fprintf('method type is %d ',methodtype);
 for i=1:diagMatNum
+    tic;
     for j=1:UMatNum
         [u,s,v]=svdsolve(A{i,j},methodtype);
         U_svd{i,j}=u;V_svd{i,j}=v;S_svd{i,j}=s;
         %         [temp1,temp2,temp3]=lssolve(A{i,j},b{i,j},2);
         %         x_qr{i,j}=temp1;residual_qr{i,j}=temp2;norm_x_qr{i,j}=temp3;
     end
+    toc;
 end
-toc;
+
 
 %% residual of U
 U_res=zeros(diagMatNum,m);
@@ -77,7 +79,13 @@ for i=1:diagMatNum
     U1=UMat{1};
     U2=U_svd{i,1};
     for j=1:m
-        U_res(i,j)=norm(U1(:,j)-U2(:,j));
+        temp=norm(U1(:,j)-U2(:,j));
+        if(temp>1.9)
+            U_res(i,j)=norm(U1(:,j)+U2(:,j));
+        else
+            U_res(i,j)=temp;
+            
+        end
     end
 end
 
@@ -85,7 +93,8 @@ figure;
 linecolor=['r','g','b','k','y','c'];
 linemarker=['o','+','*','x','s','d'];
 for i=1:diagMatNum
-    plot(U_res(i,:),'Color',linecolor(i),'Marker',linemarker(i),'MarkerSize',3,'LineWidth',1);
+    %     plot(U_res(i,:),'Color',linecolor(i),'Marker',linemarker(i),'MarkerSize',3,'LineWidth',1);
+    plot( U_res(i,4:(n-4)),'Color',linecolor(i),'Marker',linemarker(i),'MarkerSize',3,'LineWidth',1);
     hold on;
 end
 
@@ -106,7 +115,12 @@ for i=1:diagMatNum
     V1=VMat{1};
     V2=V_svd{i,1};
     for j=1:n
-        V_res(i,j)=norm(V1(:,j)-V2(:,j));
+        temp=norm(V1(:,j)-V2(:,j));
+        if(temp>1.9)
+            V_res(i,j)=norm(V1(:,j)+V2(:,j));
+        else
+            V_res(i,j)=temp;
+        end
     end
 end
 
@@ -114,7 +128,9 @@ figure;
 linecolor=['r','g','b','k','y','c'];
 linemarker=['o','+','*','x','s','d'];
 for i=1:diagMatNum
-    plot(V_res(i,:),'Color',linecolor(i),'Marker',linemarker(i),'MarkerSize',3,'LineWidth',1);
+    %     plot(V_res(i,:),'Color',linecolor(i),'Marker',linemarker(i),'MarkerSize',3,'LineWidth',1);
+    plot(V_res(i,4:end-4),'Color',linecolor(i),'Marker',linemarker(i),'MarkerSize',3,'LineWidth',1);
+    
     hold on;
 end
 
@@ -136,8 +152,21 @@ axis tight;
 methodname={'dgesvd','dgesdd/SVD divide and conquer','MATLAB SVD','${A{A}^{T}}$','Jacobi'};
 U_res=zeros(diagMatNum,UMatNum);
 for i=1:diagMatNum
+    U1=UMat{1};
+    U2=U_svd{i,1};
     for j=1:UMatNum
-        U_res(i,j)=norm(U_svd{i,j}-UMat{i},'fro');
+            U1=UMat{j};
+    U2=U_svd{i,j};
+    temp_res=0;
+        for k=4:n-4
+        temp=norm(U1(:,k)-U2(:,k));
+        if(temp>1.9)
+            temp_res=temp_res+norm(U1(:,k)+U2(:,k));
+        else
+            temp_res=temp;
+        end
+        end
+        U_res(i,j)=temp_res;
     end
 end
 
@@ -148,6 +177,7 @@ for i=1:diagMatNum
     plot(U_res(i,:),'Color',linecolor(i),'Marker',linemarker(i),'MarkerSize',10,'LineWidth',3);
     hold on;
 end
+axis tight;
 xlabel('Number','FontSize',14,'FontName','Times New Roman');
 % 创建 title
 title(methodname{methodtype},'Interpreter','latex','FontSize',14,'FontName','Times New Roman');
@@ -163,8 +193,21 @@ legend('1','2','3','4','5','6');
 methodname={'dgesvd','dgesdd/SVD divide and conquer','MATLAB SVD','${A{A}^{T}}$','Jacobi'};
 V_res=zeros(diagMatNum,UMatNum);
 for i=1:diagMatNum
-    for j=1:UMatNum
-        V_res(i,j)=norm(V_svd{i,j}-VMat{i},'fro');
+    V1=VMat{1};
+    V2=V_svd{i,1};
+    for j=1:VMatNum
+            V1=VMat{j};
+    V2=V_svd{i,j};
+    temp_res=0;
+        for k=4:n-4
+        temp=norm(V1(:,k)-V2(:,k));
+        if(temp>1.9)
+            temp_res=temp_res+norm(V1(:,k)+V2(:,k));
+        else
+            temp_res=temp;
+        end
+        end
+        V_res(i,j)=temp_res;
     end
 end
 
@@ -175,6 +218,7 @@ for i=1:diagMatNum
     plot(V_res(i,:),'Color',linecolor(i),'Marker',linemarker(i),'MarkerSize',10,'LineWidth',3);
     hold on;
 end
+axis tight;
 xlabel('Number','FontSize',14,'FontName','Times New Roman');
 % 创建 title
 title(methodname{methodtype},'Interpreter','latex','FontSize',14,'FontName','Times New Roman');

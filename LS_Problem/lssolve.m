@@ -7,7 +7,12 @@ end
 rcond = 1/condBound;
 switch flag
     case 1 %QR full rank
-        
+        [U,S,V]=svd(A);
+        upperBound=1000;
+        temp=upperBound/condBound;
+        S(S<temp)=0;
+        rank=(sum(S>0));
+        A=U*S*V';       
         [~,x,~]=nag_lapack_dgels('N',A,b);
         x=x(1:n);
         
