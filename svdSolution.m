@@ -1,10 +1,10 @@
-function [U,S,V]=svdSolution(A,flag)
+function [U,S,V]=svdsolve(A,flag)
 if nargin==1
-    flag=0;
+    flag=1;
 end
 
 switch flag
-    case 0
+    case 1
         [U,S,V]=svd(A);
     otherwise
 end
