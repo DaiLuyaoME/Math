@@ -1,4 +1,4 @@
-clear all;
+% clear all;
 close all;
 clc;
 
@@ -177,7 +177,10 @@ ANum=diagMatNum*UMatNum;
 A=cell(diagMatNum,UMatNum);
 for i=1:diagMatNum
     for j=1:UMatNum
-        A{i,j}=UMat{j}*diagMat{i}*transpose(VMat{j});
+        tempdiag=diagMat{i};
+        index=randperm(n,rankDeficient);
+        tempdiag(:,index)=0;
+        A{i,j}=UMat{j}*tempdiag*transpose(VMat{j});
     end
 end
 
@@ -186,9 +189,17 @@ lowerX=-abs(upperBound);
 upperX=abs(upperBound);
 X=cell(diagMatNum,UMatNum);
 b=cell(diagMatNum,UMatNum);
+b_real=cell(diagMatNum,UMatNum);
 for i=1:diagMatNum
     for j=1:UMatNum
         X{i,j}=random('unif',lowerX,upperX,[n 1]);
-        b{i,j}=A{i,j}*X{i,j};
+        tempb=A{i,j}*X{i,j};
+        b_real{i,j}=tempb;
+        temp=2*rand(m,1)-1;
+        posindex=temp>0;
+        negindex=temp<=0;
+        temp(posindex)=1;
+        temp(negindex)=-1;
+        b{i,j}=tempb+(tempb./100).*temp;
     end
 end
