@@ -32,7 +32,7 @@ switch flag
         [~, x, ~, r, ~] = nag_lapack_dgelss(A, b,rcond);
         x=x(1:n);
     case 4 % svd divide and conquer
-        [~, x, ~, r, ~] = nag_lapack_dgelsd(A, b);
+        [~, x, ~, r, ~] = nag_lapack_dgelsd(A, b,rcond);
         x=x(1:n);
     case 5
         temp=A'*A;
@@ -41,6 +41,6 @@ switch flag
         r=400;
 end
 % size(x)
-residual=norm(A*x-b);
+residual=norm(A*x-b)/norm(b);
 norm_x=norm(x);
 end

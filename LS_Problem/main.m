@@ -3,9 +3,10 @@
 % clc;
 
 %% generate data
-rankDeficient=3;
-
+rankDeficient=0;
+distrubance=1/1000;
 % dataGenerator;
+methodtype=3;
 %% analysis the singular value distribution
 close all;
 num=40;
@@ -59,7 +60,7 @@ residual_svd=cell(diagMatNum,UMatNum);
 % norm_x_qr=cell(diagMatNum,UMatNum);
 norm_x_svd=cell(diagMatNum,UMatNum);
 rank_svd=cell(diagMatNum,UMatNum);
-methodtype=3;
+
 % minSvalue=2;
 % condBound=upperBound/minSvalue;
 
@@ -115,8 +116,8 @@ xlabel('Number','FontSize',14,'FontName','Times New Roman');
 title(methodname{methodtype},'FontSize',14,'FontName','Times New Roman');
 
 % 创建 ylabel
-ylabel('${{\left\| Ax-b \right\|}_{2}}$','Interpreter','latex','FontSize',14,'FontName','Times New Roman');
-legend(legendName{1},legendName{2},legendName{3},legendName{4},legendName{5},legendName{6});
+ylabel('$\frac{{{\left\| Ax-b \right\|}_{2}}}{{{\left\| b \right\|}_{2}}}$','Interpreter','latex','FontSize',20,'FontName','Times New Roman');
+legend('1','2','3','4','5','6');
 % legend(legendName);
 % figure;
 % for i=1:diagMatNum
@@ -156,8 +157,8 @@ xlabel('Number','FontSize',14,'FontName','Times New Roman');
 title(methodname{methodtype},'FontSize',14,'FontName','Times New Roman');
 
 % 创建 ylabel
-ylabel('${{\left\| x-{{x}^{*}} \right\|}_{2}}$','Interpreter','latex','FontSize',14,'FontName','Times New Roman');
-legend(legendName{1},legendName{2},legendName{3},legendName{4},legendName{5},legendName{6});
+ylabel('$\frac{{{\left\| x-{{x}^{*}} \right\|}_{2}}}{{{\left\| {{x}^{*}} \right\|}_{2}}}$ ','Interpreter','latex','FontSize',20,'FontName','Times New Roman');
+legend('1','2','3','4','5','6');
 
 %% analyse norm(x)
 % close all;
@@ -191,5 +192,5 @@ xlabel('Number','FontSize',14,'FontName','Times New Roman');
 title(methodname{methodtype},'FontSize',14,'FontName','Times New Roman');
 
 % 创建 ylabel
-ylabel('${{\left\| x\right\|}_{2}}$','Interpreter','latex','FontSize',14,'FontName','Times New Roman');
-legend(legendName{1},legendName{2},legendName{3},legendName{4},legendName{5},legendName{6});
+ylabel('${{\left\| x\right\|}_{2}}$','Interpreter','latex','FontSize',20,'FontName','Times New Roman');
+legend('1','2','3','4','5','6');

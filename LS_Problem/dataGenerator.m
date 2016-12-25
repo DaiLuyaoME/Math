@@ -200,6 +200,6 @@ for i=1:diagMatNum
         negindex=temp<=0;
         temp(posindex)=1;
         temp(negindex)=-1;
-        b{i,j}=tempb+(tempb./100).*temp;
+        b{i,j}=tempb+(tempb*distrubance).*temp;
     end
 end
