@@ -35,7 +35,7 @@ xListExactSearch = xListExactSearch(1:i);
 objValueListExactSearch = objValueListExactSearch(1:i);
 gradValueListExactSearch = gradValueListExactSearch(1:i);
 
-plot(xListExactSearch(1:i));
+% plot(xListExactSearch(1:i));
 
 %% solve problem one with back tracking search
 maxIter = 100;
