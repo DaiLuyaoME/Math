@@ -24,8 +24,4 @@ switch normType
         direction = -1 * grad/norm(grad);
 end
 
-
-
-
-
 end

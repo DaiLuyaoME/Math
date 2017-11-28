@@ -12,7 +12,7 @@ function [objFunValue,xNew,t,iterNum,flag] = exactLineSearch(objFun,xk,descentDi
 minArgs=3;
 maxArgs=7;
 narginchk(minArgs,maxArgs);
-defaultThreshold = 1e-5;
+defaultThreshold = 1e-16;
 defaultMaxIter = 100;
 if nargin == 3
     gamma = 1.1;
@@ -28,6 +28,10 @@ end
 
 if nargin == 5
     threshold = defaultThreshold;
+    maxIter = defaultMaxIter;
+end
+
+if nargin == 6
     maxIter = defaultMaxIter;
 end
 

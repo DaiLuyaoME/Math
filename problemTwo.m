@@ -4,10 +4,11 @@ gradFun = @(x)[-2*(1-x(1))-8*x(1)*( -1*x(1)^2+x(2));4*(-1*x(1)^2+x(2))];
 %% solve problem two with exact line search
 
 % parameters initialization
-maxIter = 100;
+maxIter = 300;
 xCell = cell(3,1);
 gradCell = cell(3,1);
 objFunValueCell = cell(3,1);
+descentDirectionCell = cell(3,1);
 gradBound = 1e-8;
 
 for i = 1:3
@@ -17,6 +18,7 @@ for i = 1:3
     tempX = zeros(2,maxIter+1);
     tempGrad = zeros(2,maxIter+1);
     tempObjValue = zeros(1,maxIter+1);
+    tempDescentDirection = zeros(2,maxIter+1);
     tempX(:,1) = x0;
     tempGrad(:,1) = gradFun(x0);
     tempObjValue(1) = objFun(x0);
@@ -25,11 +27,17 @@ for i = 1:3
             break;
         end
         descentDirection = calculateDescentDirection(tempGrad(:,j-1),i);
+        tempDescentDirection(:,j-1) = descentDirection;
         [tempObjValue(j),tempX(:,j),t,iterNum,flag] = exactLineSearch(objFun,tempX(:,j-1),descentDirection);
+%          [tempObjValue(j),tempX(:,j),t,iterNum,flag] = exactLineSearch(objFun,tempX(:,j-1),descentDirection,1.1,norm(descentDirection),1e-8)
         tempGrad(:,j) = gradFun(tempX(:,j));
     end
-    xCell{i} = tempX;
-    gradCell{i} = tempGrad;
-    objFunValueCell{i} = tempObjValue;
+    disp('the Iteration number is ');
+    disp(j);
+%     sprintf('the iteration number is %d', j);
+    xCell{i} = tempX(:,1:(j-1));
+    gradCell{i} = tempGrad(:,1:(j-1));
+    objFunValueCell{i} = tempObjValue(1:(j-1));
+    descentDirectionCell{i} = tempDescentDirection(:,1:(j-2));
     
 end
