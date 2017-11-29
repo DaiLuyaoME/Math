@@ -2,10 +2,6 @@ clear;
 
 objFun = @(x) log( exp(x-5) + exp(5-x) );
 gradFun = @(x) ( exp(2*x) - exp(10) ) / (exp(2*x) + exp(10)) ;
-%%
-% fplot(objFun,[-10,10]);
-% figure;
-% fplot(gradFun,[-10,10]);
 
 %% solve problem one with exact line search
 
