@@ -1,4 +1,4 @@
-clear all;
+clear;
 close all;
 
 objFun = @(x) log( exp(x-5) + exp(5-x) );

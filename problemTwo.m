@@ -41,3 +41,6 @@ for i = 1:3
     descentDirectionCell{i} = tempDescentDirection(:,1:(j-2));
     
 end
+%%
+postProcessingProblemTwo;
+

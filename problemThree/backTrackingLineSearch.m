@@ -1,31 +1,35 @@
-function [objFunValue,xNew,t,iterNum,flag] = backTrackingLineSearch(objFun,xk,descentDirection,grad,alpha,beta,maxIter)
+function [objFunValue,xNew,t,iterNum,flag] = backTrackingLineSearch(objFun,xk,descentDirection,grad,A)
 %% function description
 % objFun: handle to objective function
 % grad: current gradient
 % xk: the current optimal solution
 
 
-minArgs=4;  
-maxArgs=7;
-narginchk(minArgs,maxArgs);
 
-if nargin == 4 
-    alpha = 0.1;
-    beta = 0.7;
-    maxIter = 100;
-end
-if nargin == 5
-    beta = 0.7;
-    maxIter = 100;
-end
-if nargin == 6
-    maxIter = 100; % the default max iteration number is 100
-end
+% alpha = 0.1;
+% beta = 0.7;
+% maxIter = 3000;
+
+alpha = 0.05;
+beta = 0.5;
+maxIter = 3000;
+
 
 t = 1;
 flag = 0;
 currentObjValue = objFun(xk);
 descentValue =  dot(grad,descentDirection); % this value should be negative
+
+for i = 1:maxIter
+    xNew = xk + t * descentDirection;
+    if ( max(A'* xNew) <1 && max(abs(xNew)) <1)
+        break;
+    end
+    t = t * beta;
+end
+
+
+
 
 for i = 1:maxIter
     xNew = xk + t * descentDirection;
