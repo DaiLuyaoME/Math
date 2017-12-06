@@ -15,8 +15,9 @@ for i = 2:n
     if i == n
         break;
     else
-        for k = i : n
-            L(k,i) = A(k,i) -   sum(L(i,1:(i-1)) .* L(k,1:(i-1)));
+        L(i,i) = sqrt( A(i,i) - sum(L(i,1:(i-1)).^2) );
+        for k = (i+1) : n
+            L(k,i) = ( A(k,i) -   sum(L(i,1:(i-1)) .* L(k,1:(i-1))) ) / L(i,i);
             %             L(k,i) = sqrt( A(k,i) - sum(temp .* L(k,1:(i-1))) );
         end
     end

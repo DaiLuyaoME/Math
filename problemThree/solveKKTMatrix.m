@@ -2,7 +2,7 @@ function [v,w] = solveKKTMatrix(H,A,g,h)
 L = choleskyDecomposition(H);
 AT = A';
 [m,n] = size(A);
-opts1.LU = true;
+opts1.LT = true;
 opts2.UT = true;
 %% step one
 Y = zeros(n,m); % H^-1 * AT

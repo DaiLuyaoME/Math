@@ -1,4 +1,4 @@
-function [objFunValue,xNew,t,iterNum,flag] = backTrackingLineSearch(objFun,xk,descentDirection,grad,A)
+function [objFunValue,xNew,t,iterNum,flag] = backTrackingLineSearch(objFun,xk,descentDirection,grad)
 %% function description
 % objFun: handle to objective function
 % grad: current gradient
@@ -19,14 +19,6 @@ t = 1;
 flag = 0;
 currentObjValue = objFun(xk);
 descentValue =  dot(grad,descentDirection); % this value should be negative
-
-for i = 1:maxIter
-    xNew = xk + t * descentDirection;
-    if ( max(A'* xNew) <1 && max(abs(xNew)) <1)
-        break;
-    end
-    t = t * beta;
-end
 
 
 
