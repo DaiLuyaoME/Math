@@ -1,6 +1,5 @@
 %%
-figure;
-plot(xList(1,:),xList(2,:));
+plotXk(xList(1,:),xList(2,:));
 %%
-figure;
-plot(objValueList);
+
+plotObj(objValueList);

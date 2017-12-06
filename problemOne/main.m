@@ -1,7 +1,6 @@
 objFun = @(x)(1-x(1))^2+2*(x(2)-x(1)^2)^2;
 gradFun = @(x)[-2*(1-x(1))-8*x(1)*( -1*x(1)^2+x(2));4*(-1*x(1)^2+x(2))];
 hessianFun = @(x)[2 + 24*x(1)^2-8*x(2),-8 * x(1); -8 * x(1), 4];
-%%
 x0 = [0;0];
 xList = [];
 gradList = [];
@@ -24,3 +23,6 @@ for j = 1:maxIter
         break;
     end
 end
+xList = [x0,xList];
+objValueList = [objFun(x0),objValueList];
+postProcessing;

@@ -1,4 +1,5 @@
 %%
+clear;
 load('A_m=30_n=100.mat');
 load('x_0.mat');
 load('b.mat');
@@ -37,9 +38,11 @@ tList = tList(1:j);
 
 disp('the iteration number is ');
 disp(j);
+postProcessing;
 
 
 %% 
+clear;
 load('A_m=30_n=100.mat');
 load('x_1.mat');
 load('b.mat');
@@ -97,14 +100,7 @@ tList = tList(1:(j-1));
 disp('the iteration number is ');
 disp(j-1);
 
-%%
-optimalValue = objValueList(end);
-figure;
-plot(log10(objValueList - optimalValue));
-%%
-close all;
-figure;
-plot(objValueList)
+postProcessing;
 
 
 

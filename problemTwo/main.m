@@ -1,12 +1,13 @@
 %% 按Ctrl +　Enter 运行本节得到m=50 n = 50时的结果
 % press Ctrl + Enter to run this section, m = 50, n = 50;
-
+clear;
 load('m=50_n=50.mat');
 [n,m] = size(A);
 x0 = zeros(n,1);
 maxIter = 1000;
 gradFun = @(x)calculateGradient(A,x);
 objFun = @(x)objectFunction(A,x);
+
 hessianFun = @(x)calculateHessianMatrix(A,x);
 
 TOL = 1e-8;
@@ -31,12 +32,14 @@ for j = 1:maxIter
 end
 disp('the iteration number is ');
 disp(j);
+postProcessing;
 
 
 
 
 %% 按Ctrl +　Enter 运行本节得到m=50 n = 50时的结果
 % press Ctrl + Enter to run this section, m = 50, n = 50;
+clear;
 load('m=100_n=100.mat');
 [n,m] = size(A);
 x0 = zeros(n,1);
@@ -67,7 +70,7 @@ for j = 1:maxIter
 end
 disp('the iteration number is ');
 disp(j);
-
+postProcessing;
 
 
 
