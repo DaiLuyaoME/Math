@@ -47,7 +47,7 @@ for i = 1:maxIter
     resDual = q + P*xk - lambda + A'*mu; resCentral = diag(lambda)*xk - 1/t * ones(n,1); resPrimal = A*xk - b;
     % resvector = [q + P*xk - lambda + A'*mu; diag(lambda)*x - 1/t * ones(n,1); A*x - b];
     etaEs = lambda' * xk;
-    if( abs(etaEs) < TOL && norm(resDual) < TOL && norm(resPriaml) < TOL)
+    if( abs(etaEs) < TOL && norm(resDual) < TOL && norm(resPrimal) < TOL)
         break;
     end
     etaList = [etaList,etaEs]; resNormList = [resNormList,norm([norm(resDual),norm(resPrimal)])]; 
@@ -55,9 +55,9 @@ for i = 1:maxIter
     delta = linsolve(revisedKKTMatrix,-1 * resvector);
     deltaX = delta(1:n); deltaLambda = delta((n+1):(2*n)); deltaMu = delta((2*n+1):end);
     indexX = deltaX < 0 & xk > 0;
-    temp1 = max(abs(xk(indexX)./deltaX(indexX)));
+    temp1 = min(abs(xk(indexX)./deltaX(indexX)));
     indexLambda = deltaLambda < 0 & lambda > 0;
-    temp2 = max(abs(lambda(indexLambda)./deltaLambda(indexLambda)));
+    temp2 = min(abs(lambda(indexLambda)./deltaLambda(indexLambda)));
     searchT = 0.99 * max([temp1,temp2]);
     searchT = min(searchT,1);
     xk = xk + searchT * deltaX;
@@ -68,7 +68,12 @@ end
 
 disp('the iteration number is ');
 disp(i);
-
+%%
+figure;
+plot(log10(resNormList));
+%%
+figure;
+plot(log10(etaList));
 
 
 
