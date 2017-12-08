@@ -10,7 +10,7 @@ load('x_0.mat');
 
 
 % [n,m] = size(A);
-maxIter = 10;
+maxIter = 100;
 objFun = @(x)0.5 * x'*P*x + q'*x;
 objPhi = @(x)-1*sum(log(x));
 gradFun = @(x)P*x + q;
@@ -27,30 +27,65 @@ objBar = @(x,t) t*objFun(x) + objPhi(x);
 
 xList = [];
 gradList = [];
-tList = [];
+tList = [];                 
 vList = [];
+objValueList = [];
 xk = x_0;
-t = 1;
 miu = 80;
 TOL = 1e-10;
 [m,n] = size(A);
 
-
-
-
+%% phase one, find feasible initial point
+vk =  zeros(m,1);
+tempt = 1;
+alpha = 0.05;
+beta = 0.5;
 for j = 1:maxIter
-    for k = 1:maxIter
-
-
+    tempGrad = gradBar(xk,tempt);
+    [deltaX,deltaV] = solveKKTMatrix(hessianBar(xk,tempt),A,gradBar(xk,tempt)+A'*vk,A*xk-b);
+    r = [gradBar(xk,tempt)+A'*vk;A*xk-b];
+    if( norm(r) < TOL)
+        break;
+    end
+    t = 1;
+    while(min(xk+t*deltaX) <= 0)
+        t = t * beta;
     end
     
+    while ( norm( [ gradBar(xk+t*deltaX,tempt) + A'*(vk + t * deltaV);A*(xk+t*deltaX)-b] ) > (1 - alpha * t) * norm(r) )
+        t = t * beta;
+    end
+    xk = xk + t*deltaX;
+    vk = vk + t*deltaV;
+    % vk = vk + t*deltaV;
+    % xList = [xList,xk];
+    % gradList = [gradList,gradBar(xk)];
+    % tList = [tList,t];
+    % objValueList(j) = objFun(xk);
+%     if(t == 1)
+%         break;
+%     end
+end
 
-    [descentDirection,v] = solveKKTMatrix(hessianBar(xk,t),A,gradBar(xk,t),0);
+
+%%
+
+t = 1;
+for j = 1:maxIter
     tempObj = @(x)objBar(x,t);
-    [objValueList(j),xk,step,iterNum,flag] = backTrackingLineSearch(tempObj,xk,descentDirection,gradBar(xk,t));
-    xList = [xList,xk];
-    tList = [tList,step];
-    vList = [vList,v];
+    for k = 1:maxIter
+        [descentDirection,v] = solveKKTMatrix(hessianBar(xk,t),A,gradBar(xk,t),0);
+        [objValue,xk,stept,iterNum,flag] = backTrackingLineSearch(tempObj,xk,descentDirection,gradBar(xk,t));
+        xList = [xList,xk];
+        tList = [tList,stept];
+        vList = [vList,v];
+        objValueList = [objValueList,objValue];
+        tempRes = dot(gradBar(xk,t),descentDirection);
+        if(0.5 * abs(dot(gradBar(xk,t),descentDirection)) < 1e-8)
+            break;
+        end
+    end
+    iterationList(j) = k;
     dualIntervalList(j) = m/t;
     if(m / t < TOL)
         break;
@@ -102,7 +137,7 @@ disp(j);
 %     while(min(xk+deltaX) <= 0)
 %         t = t * beta;
 %     end
-    
+
 %     while ( norm( [ gradFun(xk+t*deltaX) + A'*(vk + t * deltaV);A*(xk+t*deltaX)-b] ) > (1 - alpha * t) * norm(r) )
 %         t = t * beta;
 %     end
@@ -114,7 +149,7 @@ disp(j);
 %     objValueList(j) = objFun(xk);
 % end
 
-    
+
 % %     [objValueList(j),xk,t,iterNum,flag] = backTrackingLineSearch(objFun,xk,descentDirection,tempGrad);
 
 
@@ -130,9 +165,9 @@ disp(j);
 
 
 
-        
-        
-        
-        
-        
-    
+
+
+
+
+
+
