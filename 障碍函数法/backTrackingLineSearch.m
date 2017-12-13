@@ -21,7 +21,7 @@ currentObjValue = objFun(xk);
 descentValue =  dot(grad,descentDirection); % this value should be negative
 
 while( min(xk + t * descentDirection) <= 0)
-    t = t * beta;
+    t = t * 0.99;
 end
 
 % for i = 1:maxIter

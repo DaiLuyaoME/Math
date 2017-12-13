@@ -10,7 +10,7 @@ load('x_0.mat');
 
 
 % [n,m] = size(A);
-maxIter = 100;
+maxIter = 300;
 objFun = @(x)0.5 * x'*P*x + q'*x;
 objPhi = @(x)-1*sum(log(x));
 gradFun = @(x)P*x + q;
@@ -58,7 +58,7 @@ for i = 1:maxIter
     temp1 = min(abs(xk(indexX)./deltaX(indexX)));
     indexLambda = deltaLambda < 0 & lambda > 0;
     temp2 = min(abs(lambda(indexLambda)./deltaLambda(indexLambda)));
-    searchT = 0.99 * max([temp1,temp2]);
+    searchT = 0.99 * min([temp1,temp2]);
     searchT = min(searchT,1);
     xk = xk + searchT * deltaX;
     lambda = lambda + searchT * deltaLambda;
@@ -69,43 +69,14 @@ end
 disp('the iteration number is ');
 disp(i);
 %%
-figure;
-plot(log10(resNormList));
+optimalX = xk;
+optimalP = objFun(xk);
+optimalLambda = lambda;
+optimalMu = mu;
 %%
-figure;
-plot(log10(etaList));
-
-
-
-
-
-
-% for j = 1:maxIter
-%     tempObj = @(x)objBar(x,t);
-%     for k = 1:maxIter
-%         [descentDirection,v] = solveKKTMatrix(hessianBar(xk,t),A,gradBar(xk,t),0);
-%         [objValue,xk,stept,iterNum,flag] = backTrackingLineSearch(tempObj,xk,descentDirection,gradBar(xk,t));
-%         xList = [xList,xk];
-%         tList = [tList,stept];
-%         vList = [vList,v];
-%         objValueList = [objValueList,objValue];
-%         tempRes = dot(gradBar(xk,t),descentDirection);
-%         if(0.5 * abs(dot(gradBar(xk,t),descentDirection)) < 1e-8)
-%             break;
-%         end
-%     end
-%     iterationList(j) = k;
-%     dualIntervalList(j) = m/t;
-%     if(m / t < TOL)
-%         break;
-%     end
-%     t = t * miu;
-% end
-
-% disp('the iteration number is ');
-% disp(j);
-% postProcessing;
-
+semiplotData(resNormList,'iteration number','$\log \left\{ {{\left( \left\| {{r}_{pri}} \right\|_{2}^{2}+\left\| {{r}_{dual}} \right\|_{2}^{2} \right)}^{1/2}} \right\}$');
+%%
+semiplotData(etaList,'iteration number','$\log \left( {\hat{\eta }} \right)$');
 
 
 
