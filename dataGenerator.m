@@ -1,5 +1,8 @@
 %% generate white noise
+% rng default;
+rng(120);
 noisePower = 0.12;
+% noisePower = 5;
 N = 256;
 Nfft = 4096;
 u1 = sqrt(noisePower) * randn(1,N);
@@ -19,11 +22,12 @@ B5 = [1, -1.2727, 0.98];
 B = conv(conv(conv(conv(B1,B2),B3),B4),B5);
 figure;h=zplane(B,1);set(h,'LineWidth',2);
 % figure;freqz(B,1);
-figure;[H,w] = freqz(B,1,Nfft);plot(w/pi,10*log10(abs(H)),'LineWidth',2);xlabel('Normalized Frequency  (\times\pi rad/sample)');ylabel('Magnitude (dB)');
+figure;[H,w] = freqz(B,1,Nfft,'whole');plot(w/(2*pi),10*log10(abs(H)),'LineWidth',2);xlabel('Normalized Frequency  (\times2\pi rad/sample)');ylabel('Magnitude (dB)');
 %% generate colored noise
 v1 = filter(B,1,u1);
 v2 = filter(B,1,u2);
 v = v1 + 1i * v2;
+plotIndex = -(N-1) : (N-1);
 plotCorrelation(plotIndex,abs(xcorr(v,v)),'$\left| {{r}_{v}}\left( n \right) \right|$');
 %%
 a1 = 12;
@@ -46,16 +50,16 @@ x = v + y;
 figure;plot(abs(x));
 figure;plot(rad2deg(angle(x)));
 %%
-y = fft(x);
-figure;
-plot(abs(y));
+% y = fft(x);
+% figure;
+% plot(abs(y));
 %% ture power spectral
-[h,w] = freqz(conv(B,flip(B)),1,Nfft);
+[h,w] = freqz(conv(B,flip(B)),1,Nfft,'whole');
 mag = abs(h) * 2 * noisePower;
-n1 = 2 * floor(f1 * Nfft);mag(n1) = mag(n1) + 2 * pi * a1^2;
-n2 = 2 * floor(f2 * Nfft);mag(n2) = mag(n2) + 2 * pi * a2^2;
-n3 = 2 * floor(f3 * Nfft);mag(n3) = mag(n3) + 2 * pi * a3^2;
-plotIndex = linspace(0,pi,Nfft);
-figure;plot(plotIndex./pi,10*log10(mag),'LineWidth',2);xlabel('Normalized Frequency  (\times\pi rad/sample)');ylabel('Magnitude (dB)');
+n1 = floor(f1 * Nfft);mag(n1) = mag(n1) + 2 * pi * a1^2;
+n2 = floor(f2 * Nfft);mag(n2) = mag(n2) + 2 * pi * a2^2;
+n3 = floor(f3 * Nfft);mag(n3) = mag(n3) + 2 * pi * a3^2;
+plotIndex = linspace(0,2*pi,Nfft);
+figure;plot(plotIndex./(2*pi),10*log10(mag),'LineWidth',2);xlabel('Normalized Frequency  (\times2\pi rad/sample)');ylabel('Magnitude (dB)');
 
 
