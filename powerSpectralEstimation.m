@@ -2,16 +2,15 @@
 Nfft = 4096;
 % Nfft = 256;
 [pxx,w] = periodogram(x,[],Nfft);
-% plot(w/(2*pi),10*log10(pxx));
 plotSpectral(w/(2*pi),10*log10(pxx),'周期图法');
 %% Welch method
 Nfft = 4096;
 window = 128;
 noverlap = window * 0.5;
-[pxx,w] = pwelch(x,window,noverlap,Nfft)
+[pxx,w] = pwelch(x,window,noverlap,Nfft);
 plotSpectral(w/(2*pi),10*log10(pxx),'Welch法');
 %% correlation method
-M = 63;
+M = 83;
 Nfft = 4096;
 pxx = pcorrelation(x,M,Nfft);
 plotSpectral(w/(2*pi),10*log10(pxx),'相关函数法');

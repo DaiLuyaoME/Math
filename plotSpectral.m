@@ -28,7 +28,6 @@ set(axes1,'FontSize',16);
 % ´´½¨ legend
 legend1 = legend(axes1,'show');
 set(legend1,...
-    'Interpreter','latex',...
     'FontSize',20);
 axis tight;
 
